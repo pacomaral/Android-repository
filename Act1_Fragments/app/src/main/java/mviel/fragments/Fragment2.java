@@ -25,10 +25,8 @@ public class Fragment2 extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    //Lo utilizaremos para poder llamar a los métodos de las interfaces sobreeescribidos en el activity
+    //Lo utilizaremos para poder llamar a los métodos de la interfaz sobreescritos en el activity
     private interfazFragment2 comunicacion;
-    //private Fragment3.interfazFragment3 comunicacionFragment3;
-    //private Fragment3.interfazFragment3 comunicacionFragment3;
 
     //Para contar los clicks que llevamos
     private int contador;
@@ -82,9 +80,6 @@ public class Fragment2 extends Fragment {
                 //Cada vez que hagamos click en el fragmento 2, sumaremos un valor al contador y lo mostramos en el fragmento 3
                 contador++;
 
-
-                //comunicacion.enviarTextoFragmento3(String.valueOf(contador));
-
                 //Transacción
                 fm = getFragmentManager();
                 ft = fm.beginTransaction();
@@ -108,7 +103,7 @@ public class Fragment2 extends Fragment {
                     Toast.makeText(getActivity(), "Amagant Fragment3", Toast.LENGTH_SHORT).show();
 
 
-                    //ft.remove(getActivity().getFragmentManager().findFragmentById(R.id.espaiFragment3));
+                    ft.remove(getActivity().getFragmentManager().findFragmentById(R.id.espaiFragment3));
 
                     //Añadimos esto para poder eliminarlo de la transacción también, ya que lo habíamos añadido con addToBackStack()
                     fm.popBackStack();
@@ -126,7 +121,7 @@ public class Fragment2 extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            //Recogemos en el onAttach dos objetos con los que nos comunicaremos
+            //Recogemos en el onAttach el objeto con el que nos comunicaremos
             comunicacion = (interfazFragment2) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
@@ -142,22 +137,17 @@ public class Fragment2 extends Fragment {
         comunicacion = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-
+    //Interfaz que implementará el MainActivity - Se utilizará para poder comunicarnos con esta
     public interface interfazFragment2{
+
+        //Método que sobreescribirá MainActivity y comprobará si el Fragment 3 está mostrado
         boolean estaFragment3EnActivity();
+
+        //Método que sobreescribirá MainActivity y devolverá el valor del contador de este fragmento
         int pasarValorContador();
     }
 
+    //Getter para el valor del contador
     public int getContador(){
         return this.contador;
     }

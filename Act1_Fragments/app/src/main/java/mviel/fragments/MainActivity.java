@@ -72,8 +72,6 @@ public class MainActivity extends Activity implements Fragment2.interfazFragment
         //Recibimos el valor del contador del fragment 2
         int contador = pasarValorContador();
 
-        Toast.makeText(getApplicationContext(), "Contador pasado al fragment 3", Toast.LENGTH_SHORT).show();
-
         return contador;
     }
 

@@ -8,7 +8,9 @@
         android:id="@+id/textoContador"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fontFamily="monospace"
         android:gravity="center"
-        />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
 </FrameLayout>

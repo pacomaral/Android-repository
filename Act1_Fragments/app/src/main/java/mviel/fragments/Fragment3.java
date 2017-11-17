@@ -22,20 +22,10 @@ public class Fragment3 extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    //Objeto de la interfaz para poder comunicarnos
     private interfazFragment3 comunicacion;
 
-    //Lo utilizaremos para poder llamar a los métodos de las interfaces sobreeescribidos en el activity
-   // private interfazFragment3 comunicacion;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Fragment3.
-     */
-    // TODO: Rename and change types and number of parameters
     public static Fragment3 newInstance(String param1, String param2) {
         Fragment3 fragment = new Fragment3();
         Bundle args = new Bundle();
@@ -67,7 +57,19 @@ public class Fragment3 extends Fragment {
         return v;
     }
 
+    /*
+    *   Este método es llamado cuando justo después del onCreateView (cuando se infla el layout del fragment), si este ha ido
+    *   correctamente.
+    *
+    *   Es una buena práctica recoger aquí los elementos del layout para poder trabajar con ellos. En este caso recuperamos
+    *   el texto del contador para posteriormente, recibir el contador gracias al método sobreescrito de la interfaz en el
+    *   MainActivity, y después asignarlo al textoContador.
+    *
+    *   Esto se hará cada vez que se muestre el layout, por lo que obtenemos la funcionalidad que queríamos en el apartado D
+    *   de la actividad.
+     */
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
         TextView textoContador = (TextView) view.findViewById(R.id.textoContador);
 
         //Cuando se crea en la actividad, recuperamos al textview y le ponemos el contador que obtenemos
@@ -80,6 +82,9 @@ public class Fragment3 extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
+            //Recuperamos el objeto de la interfaz haciendo referencia a la activity de parámetro del onAttach
+            //Esta activity será la que contiene el fragmento, y se puede castear a la interfaz porque
+            //la implementa
             comunicacion = (interfazFragment3) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
@@ -93,21 +98,14 @@ public class Fragment3 extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        //comunicacion = null;
+        //En el onDetach, ponemos a null la comunicación.
+        comunicacion = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
+    //Interfaz para poder comunicarnos con el MainActivity
     public interface interfazFragment3{
+        //Este método lo sobreeescribiremos en MainActivity y desde él obtendremos el valor del contador del fragmento 2.
         int recibirContador();
     }
 
