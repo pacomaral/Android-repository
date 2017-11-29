@@ -1,0 +1,35 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.paco.pacomaravillaexamen.Botonera">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_dades_personals"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dades Personals" />
+
+        <Button
+            android:id="@+id/btn_aficions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aficions" />
+
+        <ImageButton
+            android:id="@+id/btn_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_dialog_info" />
+
+    </LinearLayout>
+
+</FrameLayout>
+
