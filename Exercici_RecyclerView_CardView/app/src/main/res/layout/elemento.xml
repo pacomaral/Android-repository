@@ -7,7 +7,8 @@
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="4dp"
     card_view:cardUseCompatPadding="true"
-    card_view:cardElevation="4dp">>
+    card_view:cardBackgroundColor="#CCFFFF"
+    card_view:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +30,7 @@
                 android:layout_weight="1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@android:color/holo_red_dark"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold|italic" />
 
             <RatingBar
