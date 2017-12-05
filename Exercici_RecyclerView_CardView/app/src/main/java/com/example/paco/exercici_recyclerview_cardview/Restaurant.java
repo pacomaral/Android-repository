@@ -1,7 +1,7 @@
 package com.example.paco.exercici_recyclerview_cardview;
 
 /**
- * Created by Paco on 28/11/2017.
+ * Created by Paco
  */
 
 public class Restaurant {
