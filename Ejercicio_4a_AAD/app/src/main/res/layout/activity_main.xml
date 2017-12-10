@@ -101,17 +101,27 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/boton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
         android:layout_weight="1"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/botonHacerConsulta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Realizar consultas" />
 
         <Button
             android:id="@+id/botonBorrarBd"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Eliminar base de datos" />
+
     </LinearLayout>
 </LinearLayout>

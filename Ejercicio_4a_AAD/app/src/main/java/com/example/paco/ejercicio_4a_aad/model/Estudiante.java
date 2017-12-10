@@ -9,12 +9,11 @@ import android.content.ContentValues;
 public class Estudiante {
 
     //ATRIBUTOS
-    private String nombre, ciclo;
+    private String nombre, ciclo, notaMedia;
     private int edad, curso;
-    private float notaMedia;
 
     //CONSTRUCTOR
-    public Estudiante(String nombre, String ciclo, int edad, int curso, float notaMedia) {
+    public Estudiante(String nombre, String ciclo, int edad, int curso, String notaMedia) {
         this.nombre = nombre;
         this.ciclo = ciclo;
         this.edad = edad;
@@ -55,11 +54,11 @@ public class Estudiante {
         this.curso = curso;
     }
 
-    public float getNotaMedia() {
+    public String getNotaMedia() {
         return notaMedia;
     }
 
-    public void setNotaMedia(float notaMedia) {
+    public void setNotaMedia(String notaMedia) {
         this.notaMedia = notaMedia;
     }
 

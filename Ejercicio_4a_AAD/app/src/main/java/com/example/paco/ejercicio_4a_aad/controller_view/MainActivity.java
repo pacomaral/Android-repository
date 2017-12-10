@@ -15,7 +15,7 @@ import static android.R.attr.onClick;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button insertarEstudiante, insertarProfesor, borrarEstudiante, borrarProfesor, borrarBd;
+    private Button insertarEstudiante, insertarProfesor, borrarEstudiante, borrarProfesor, borrarBd, hacerConsulta;
     private EditText cajaIdEstudiante, cajaIdProfesor;
     private Adaptador_DB adaptador;
 
@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //Recogemos elementos del layout
         insertarEstudiante = (Button) findViewById(R.id.botonInsertarEstudiante);
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         borrarBd = (Button) findViewById(R.id.botonBorrarBd);
         cajaIdEstudiante = (EditText)findViewById(R.id.cajaIdEstudiante);
         cajaIdProfesor = (EditText)findViewById(R.id.cajaIdProfesor);
+        hacerConsulta = (Button)findViewById(R.id.botonHacerConsulta);
 
         //Añadimos listener a los botones
         insertarEstudiante.setOnClickListener(this);
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         borrarEstudiante.setOnClickListener(this);
         borrarProfesor.setOnClickListener(this);
         borrarBd.setOnClickListener(this);
-
+        hacerConsulta.setOnClickListener(this);
     }
 
     @Override
@@ -71,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //Si no se han introducido datos válidos, lo indicamos
                 Toast.makeText(getApplicationContext(), "ID no válida", Toast.LENGTH_SHORT).show();
             }
+
+            adaptador.cerrar();
         }
         else if(v.getId() == R.id.botonBorrarProfesor){
             //Borraremos profesor según Id
@@ -88,9 +92,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //Si no se han introducido datos válidos, lo indicamos
                 Toast.makeText(getApplicationContext(), "ID no válida", Toast.LENGTH_SHORT).show();
             }
+
+            adaptador.cerrar();
         }
         else if(v.getId() == R.id.botonBorrarBd){
             //Borraremos la base de datos completamente
+            adaptador = new Adaptador_DB(getApplicationContext());
+            if(adaptador.borrarBD(getApplicationContext(), "db_ej4a.db")){
+                Toast.makeText(getApplicationContext(), "Base de datos borrada", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if(v.getId() == R.id.botonHacerConsulta){
+            //Abriremos el activity de las consultas
+            Intent i = new Intent(getApplicationContext(), Activity_Consultas.class);
+            startActivity(i);
         }
     }
 }

@@ -20,7 +20,7 @@ public class Activity_Estudiante extends AppCompatActivity {
 
     private String nombre, ciclo;
     private int edad, curso;
-    private float nota;
+    private String nota;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class Activity_Estudiante extends AppCompatActivity {
             ciclo = String.valueOf(cajaCiclo.getText());
             edad = Integer.parseInt(String.valueOf(cajaEdad.getText()));
             curso = Integer.parseInt(String.valueOf(cajaCurso.getText()));
-            nota = Float.parseFloat(String.valueOf(cajaNota.getText()+"f"));
+            nota = String.valueOf(cajaNota.getText());
             return true;
         }
         catch(Exception e){
