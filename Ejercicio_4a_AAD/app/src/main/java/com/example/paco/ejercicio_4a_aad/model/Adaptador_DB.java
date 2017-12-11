@@ -40,12 +40,17 @@ public class Adaptador_DB {
     //Instancia bd
     private SQLiteDatabase db;
 
+    //En esta lista guardaremos los id's de los elementos mostrados en las consultas
+    private ArrayList<Integer> listaIds;
+
     /**
      *  CONSTRUCTOR
      */
     public Adaptador_DB(Context c){
         contexto=c;
         dbHelper = new DbHelper(contexto, DATABASE_NAME, null, DATABASE_VERSION);
+
+        listaIds = new ArrayList<Integer>();
     }
 
     /**
@@ -88,42 +93,27 @@ public class Adaptador_DB {
 
     public boolean borrarEstudiante(int id){
 
-        //Si la Id es superior al número de filas de la tabla de estudiantes, no se podrá borrar esta.
-        if(id > (int) DatabaseUtils.queryNumEntries(db, DATABASE_TABLE_STUDENTS)) {
+        try {
+            db.delete(
+                    DATABASE_TABLE_STUDENTS,
+                    "_id = ?",
+                    new String[]{String.valueOf(id)});
+            return true;
+        } catch (Exception e) {
             return false;
-        }
-
-        //Si se puede borrar, lo intentamos
-        else{
-            try {
-                db.delete(
-                        DATABASE_TABLE_STUDENTS,
-                        "_id = ?",
-                        new String[]{String.valueOf(id)});
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
         }
     }
 
     public boolean borrarProfesor(int id){
-        //Si la Id es superior al número de filas de la tabla de estudiantes, no se podrá borrar esta.
-        if(id > (int) DatabaseUtils.queryNumEntries(db, DATABASE_TABLE_TEACHERS)) {
-            return false;
-        }
 
-        //Si se puede borrar, lo intentamos
-        else{
-            try {
-                db.delete(
-                        DATABASE_TABLE_TEACHERS,
-                        "_id = ?",
-                        new String[]{String.valueOf(id)});
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
+        try {
+            db.delete(
+                    DATABASE_TABLE_TEACHERS,
+                    "_id = ?",
+                    new String[]{String.valueOf(id)});
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -143,6 +133,8 @@ public class Adaptador_DB {
     //Método para obtener todos los estudiantes y los profesores
     public ArrayList<String> obtenerTodos(){
 
+        listaIds.clear();
+
         ArrayList<String> lista = new ArrayList<String>();
 
         Cursor cursor;
@@ -156,6 +148,7 @@ public class Adaptador_DB {
         if(cursor != null && cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 lista.add("Profesor "+cursor.getInt(0) + "    ||    "+cursor.getString(1)+ " ----- " + cursor.getInt(3) + "º " + cursor.getString(2));
+                listaIds.add(cursor.getInt(0));
                 cursor.moveToNext();
             }
         }
@@ -169,6 +162,8 @@ public class Adaptador_DB {
         if(cursor != null && cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 lista.add("Estudiante "+cursor.getInt(0) + "    ||    "+cursor.getString(1)+ " ----- " + cursor.getInt(3) + "º " + cursor.getString(2));
+                //Guardamos Id's en la lista
+                listaIds.add(cursor.getInt(0));
                 cursor.moveToNext();
             }
         }
@@ -209,8 +204,11 @@ public class Adaptador_DB {
 
         //Recorremos el cursor
         if(cursor != null && cursor.moveToFirst()) {
+            listaIds.clear();
             for (int i = 0; i < cursor.getCount(); i++) {
                 lista.add("Estudiante "+cursor.getInt(0) + "    ||    "+cursor.getString(1)+ " ----- " + cursor.getInt(3) + "º " + cursor.getString(2));
+                //Guardamos Id's en la lista
+                listaIds.add(cursor.getInt(0));
                 cursor.moveToNext();
             }
         }
@@ -252,8 +250,10 @@ public class Adaptador_DB {
 
         //Recorremos el cursor
         if(cursor != null && cursor.moveToFirst()) {
+            listaIds.clear();
             for (int i = 0; i < cursor.getCount(); i++) {
                 lista.add("Profesor "+cursor.getInt(0) + "    ||    "+cursor.getString(1)+ " ---- " + cursor.getInt(3) + "º " + cursor.getString(2));
+                listaIds.add(cursor.getInt(0));
                 cursor.moveToNext();
             }
         }
@@ -261,6 +261,11 @@ public class Adaptador_DB {
         cursor.close();
 
         return lista;
+    }
+
+    //Método para obtener una lista con los Ids de los estudiantes
+    public ArrayList<Integer> getIds(){
+        return this.listaIds;
     }
 
 
