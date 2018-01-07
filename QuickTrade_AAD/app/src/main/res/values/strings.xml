@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">QuickTrade_AAD</string>
+
+    <!-- Nodos firebase -->
+    <string name="nodo_usuarios">usuarios</string>
+    <string name="nodo_productos">productos</string>
+
+    <!-- Campos del nodo usuarios -->
+    <string name="campo_usuario">usuario</string>
+    <string name="campo_correo">correo</string>
+    <string name="campo_nombre_usuario">nombre</string>
+    <string name="campo_apellidos">apellidos</string>
+    <string name="campo_direccion">direccion</string>
+
+    <!-- Campos del nodo productos -->
+    <string name="campo_nombre_producto">nombre</string>
+    <string name="campo_descripcion">descripcion</string>
+    <string name="campo_precio">precio</string>
+    <string name="campo_categoria">categoria</string>
+    <string name="campo_correo_producto">correo_vendedor</string>
+
+
+</resources>
