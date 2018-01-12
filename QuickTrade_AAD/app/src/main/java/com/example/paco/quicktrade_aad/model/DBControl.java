@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.example.paco.quicktrade_aad.MainActivity;
-import com.example.paco.quicktrade_aad.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 /**
@@ -35,16 +36,25 @@ public class DBControl {
     private Context context;
     private interfazDBControl comunicacion;
 
+    private String nombreUsuario;
+
     public DBControl(Context c){
         dbReferenceProd = FirebaseDatabase.getInstance().getReference("productos");
         dbReferenceUser = FirebaseDatabase.getInstance().getReference("usuarios");
         context = c;
-        comunicacion = (interfazDBControl) c;
     }
 
     /*
      *   Métodos
      */
+
+    public DatabaseReference getReferenceProduct(){
+        return dbReferenceProd;
+    }
+
+    public DatabaseReference getReferenceUser(){
+        return dbReferenceUser;
+    }
 
     public void registrarUsuario(String correo, String pass){
         //Obtenemos instancia
@@ -76,7 +86,9 @@ public class DBControl {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            //Toast.makeText(context, "Usuario logueado con éxito", Toast.LENGTH_SHORT).show();
+                            //Pasaremos el nombre de usuario al MainActivity
+                            comunicacion.sendUsername(nombreUsuario);
+                            //Comunicaremos al mainActivity mediante interfaz
                             comunicacion.loginCorrecto();
                         } else {
                             //Toast.makeText(context, "No se ha podido loguear el usuario", Toast.LENGTH_SHORT).show();
@@ -97,17 +109,34 @@ public class DBControl {
 
     }
 
-    public boolean existeUsuario(String user){
+    public void anyadirProductoBD(Producto p){
 
-        //Obtenemos nodos que tienen el nombre de usuario igual al introducido por parámetro
-        Query q = dbReferenceUser.orderByChild(String.valueOf(R.string.campo_usuario)).equalTo(user);
+        //Obtenemos una clave
+        String clave = dbReferenceProd.push().getKey();
+
+        dbReferenceProd.child(clave).setValue(p);
+    }
+
+    //Método para obtener el nombre de usuario a partir de su correo -- Necesitaremos para saber que usuario está logueado
+    public void consultarNombreYLoguear(final String correo, final String pass){
+
+        //Obtenemos nodos que tienen el correo igual al introducido por parámetro
+        Query q = dbReferenceUser.orderByChild("correo").equalTo(correo);   //No funciona si utilizo String.valueOf(R.string.campo_correo)
+
 
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                int c = 0;
                 for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
-                    sumaContador();
+                    //Del nodo que obtenemos (será uno), obtenemos su nombre de usuario
+                    Usuario u = datasnapshot.getValue(Usuario.class);
+                    nombreUsuario = u.getUsuario();
                 }
+
+                //Una vez hemos recogido el nombre, ya llamamos al método loginUsuario
+                loginUsuario(correo, pass);
+
             }
 
             @Override
@@ -115,61 +144,18 @@ public class DBControl {
 
             }
         });
-
-        //Si hay más de 0 usuarios con ese nombre, sí que existe el usuario
-        if(contador > 0){
-            //Limpiamos el contador
-            contador = 0;
-            return true;
-        }
-        else{
-            //Limpiamos el contador
-            contador = 0;
-            return false;
-        }
-
-
     }
 
-    public boolean existeCorreo(String correo){
 
-        //Obtenemos nodos que tienen el correo introducido por parámetro
-        Query q = dbReferenceUser.orderByChild(String.valueOf(R.string.campo_correo)).equalTo(correo);
-
-        q.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
-                    sumaContador();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        //Si hay más de 0 usuarios con ese nombre, sí que existe el usuario
-        if(contador > 0){
-            //Limpiamos el contador
-            contador = 0;
-            return true;
-        }
-        else{
-            //Limpiamos el contador
-            contador = 0;
-            return false;
-        }
-    }
-
-    private void sumaContador(){
-        contador++;
-    }
 
 
     public interface interfazDBControl{
         void loginCorrecto();
         void loginIncorrecto();
+        void sendUsername(String username);
+    }
+
+    public void getMainActivityContext(Context c){
+        comunicacion = (interfazDBControl) c;
     }
 }

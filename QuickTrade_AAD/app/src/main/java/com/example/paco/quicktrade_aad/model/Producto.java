@@ -13,6 +13,12 @@ public class Producto {
     /**
      *  Constructor
      */
+
+    //Este constructor vacío necesita estar aquí para que Firebase funcione correctamente
+    public Producto(){
+
+    }
+
     public Producto(String nombre, String descripcion, String categoria, String precio, String usuario) {
         this.nombre = nombre;
         this.descripcion = descripcion;

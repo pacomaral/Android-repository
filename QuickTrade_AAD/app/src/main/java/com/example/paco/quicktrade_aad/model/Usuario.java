@@ -10,7 +10,10 @@ public class Usuario {
     private String correo, usuario, nombre, apellidos, direccion;
 
 
-    //Constructor
+    //Constructor - El vacío es necesario para que funcione Firebase
+    public Usuario(){
+
+    }
     public Usuario(String correo, String usuario, String nombre, String apellidos, String direccion) {
         this.correo = correo;
         this.usuario = usuario;

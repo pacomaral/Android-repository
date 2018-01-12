@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.paco.quicktrade_aad.NewProductActivity"
+    android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textoNuevoProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:text="Nuevo Producto"
+            android:textAllCaps="false"
+            android:textSize="33sp"
+            android:textStyle="bold|italic"
+            android:typeface="sans" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/colorAccent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <EditText
+            android:id="@+id/cajaNombreProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Nombre del producto"
+            android:inputType="text"
+            />
+
+
+        <EditText
+            android:id="@+id/cajaDescripcionProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:hint="Descripción"
+            android:inputType="textMultiLine"
+            android:lines="4"
+            android:overScrollMode="always"
+            android:scrollHorizontally="false"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_weight="1"/>
+
+
+        <EditText
+            android:id="@+id/cajaPrecioProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:hint="Precio"
+            android:inputType="text"
+            android:layout_weight="1"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/opcionHogar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hogar" />
+
+            <RadioButton
+                android:id="@+id/opcionTecnologia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tecnología" />
+
+            <RadioButton
+                android:id="@+id/opcionCoches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Coches" />
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:background="@color/colorAccent">
+
+        <Button
+            android:id="@+id/botonNuevoProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Añadir"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private DBControl dbControl;
 
+    private String correo, nombreUsuario;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         botonAcceder.setOnClickListener(this);
         botonRegistrar.setOnClickListener(this);
 
+        //Le pasamos el contexto de esta actividad a DBControl para que se pueda comunicar
+        dbControl.getMainActivityContext(this);
+
     }
 
     @Override
@@ -52,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(!String.valueOf(cajaCorreo.getText()).isEmpty() && !String.valueOf(cajaPassword.getText()).isEmpty()){
 
                 //Este método ya se encargará de comunicarse con esta actividad para saber si el usuario se ha logueado o no
-                dbControl.loginUsuario(String.valueOf(cajaCorreo.getText()), String.valueOf(cajaPassword.getText()));
+                dbControl.consultarNombreYLoguear(String.valueOf(cajaCorreo.getText()), String.valueOf(cajaPassword.getText()));
             }
             else{
                 Toast.makeText(getApplicationContext(), "Falta introducir correo o contraseña", Toast.LENGTH_SHORT).show();
@@ -78,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Bundle parametrosRecibidos = datos.getExtras();
                     if (parametrosRecibidos != null) {
                         //Recogemos el correo con el que se ha registrado el usuario y lo ponemos en la caja correspondiente
-                        String correo = parametrosRecibidos.getString("correo");
+                        correo = parametrosRecibidos.getString("correo");
                         cajaCorreo.setText(correo);
                         cajaPassword.setText("");
                     }
@@ -96,10 +101,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void loginCorrecto() {
         Toast.makeText(getApplicationContext(), "Usuario logueado con éxito", Toast.LENGTH_SHORT).show();
 
-        //Abriremos nueva actividad
+        //Abriremos nueva actividad -- Pasando el correo para saber qué usuario se ha logueado
+        Intent i = new Intent(getApplicationContext(), MenuActivity.class);
+
+        Bundle parametros = new Bundle();
+        parametros.putString("usuario", nombreUsuario);
+        i.putExtras(parametros);
+
+        startActivity(i);
+
+        //Cerramos la actividad para que el usuario, una vez logueado, no pueda volver a la pantalla del log-in
+        finish();
     }
 
     public void loginIncorrecto(){
         Toast.makeText(getApplicationContext(), "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void sendUsername(String username) {
+        nombreUsuario = username;
+    }
+
 }
