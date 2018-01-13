@@ -23,6 +23,7 @@
             android:text="Registro"
             android:textAllCaps="false"
             android:textSize="33sp"
+            android:textColor="#FFFFFF"
             android:textStyle="bold|italic"
             android:typeface="sans"
             android:paddingTop="10dp"

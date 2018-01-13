@@ -23,6 +23,7 @@
             android:text="Productos"
             android:textAllCaps="false"
             android:textSize="33sp"
+            android:textColor="#FFFFFF"
             android:textStyle="bold|italic"
             android:typeface="sans"
             android:background="@color/colorAccent"/>
@@ -33,13 +34,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/colorAccent"
+    >
 
         <ListView
             android:id="@+id/listViewProductos"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorAccent"/>
+            android:background="@drawable/border"
+            android:layout_margin="15dp"/>
 
     </LinearLayout>
 

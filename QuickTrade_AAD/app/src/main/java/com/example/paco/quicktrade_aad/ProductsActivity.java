@@ -1,5 +1,6 @@
 package com.example.paco.quicktrade_aad;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.paco.quicktrade_aad.model.DBControl;
 import com.example.paco.quicktrade_aad.model.Producto;
@@ -43,10 +45,14 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
     private Bundle datosRecibidos;
     private Intent intent;
 
+    private Context ref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
+
+        ref = this;
 
         //Recuperamos elementos del layout
         spinnerCategoria = (Spinner)findViewById(R.id.spinnerCategoria);
@@ -71,8 +77,7 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
         filtrar = datosRecibidos.getBoolean("filtrar");
 
         if(filtrar){
-            //Mostraremos productos filtrados por usuario
-            getProductosDeUsuario(nombreUsuario);
+
             //El spinner de usuarios esta desactivado -- Querremos mostrar en este el nombre de usuario
             listaUsuarios.clear();
 
@@ -139,8 +144,7 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
                 }
 
                 //Creamos el adaptador para el ListView
-                adaptadorListView = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, listaProductos);
-                listViewProductos.setAdapter(adaptadorListView);
+                actualizarAdaptadorProductos(listaProductos);
             }
 
             @Override
@@ -172,8 +176,7 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
                 }
 
                 //Creamos el adaptador para el ListView
-                adaptadorListView = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, listaProductos);
-                listViewProductos.setAdapter(adaptadorListView);
+                actualizarAdaptadorProductos(listaProductos);
             }
 
             @Override
@@ -220,6 +223,15 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
 
             }
         });
+    }
+
+    private void actualizarAdaptadorProductos(ArrayList<String> lista){
+
+        //Adaptador -- Con layout definido por nosotros
+        adaptadorListView = new ArrayAdapter<String>(getApplicationContext(), R.layout.elemento_listview, R.id.elemento_lista, lista);
+
+        //Ponemos el adaptador al listView
+        listViewProductos.setAdapter(adaptadorListView);
     }
 
     @Override

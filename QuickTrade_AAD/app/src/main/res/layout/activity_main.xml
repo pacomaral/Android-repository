@@ -27,7 +27,8 @@
             android:textAllCaps="false"
             android:textSize="33sp"
             android:textStyle="bold|italic"
-            android:typeface="sans" />
+            android:typeface="sans"
+            android:textColor="#FFFFFF"/>
     </LinearLayout>
 
     <LinearLayout
