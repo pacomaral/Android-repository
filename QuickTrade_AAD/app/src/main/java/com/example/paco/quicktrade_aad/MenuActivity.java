@@ -99,12 +99,28 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(i);
         }
         else if(v.getId() == R.id.botonModificarPerfil){
-            //Lanzaremos ProfileActivity
+            //Lanzaremos RegisterActivity pasando boolean para no registrar sino actualizar
+            Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+
+            Bundle parametros = new Bundle();
+            parametros.putString("usuario", nombreUsuario);
+            parametros.putBoolean("editar", true);
+
+            i.putExtras(parametros);
+            startActivity(i);
 
         }
         else if(v.getId() == R.id.botonVerUsuarios){
             //Lanzaremos UsersActivity
+            Intent i = new Intent(getApplicationContext(), UsersActivity.class);
 
+            //Pasaremos en el intent el nombre de usuario -- Aunque no se necesita
+            Bundle parametros = new Bundle();
+            parametros.putString("usuario", nombreUsuario);
+
+            i.putExtras(parametros);
+
+            startActivity(i);
 
         }
         else if(v.getId() == R.id.botonCerrarSesion){

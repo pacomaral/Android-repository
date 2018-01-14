@@ -23,7 +23,9 @@
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".ProductsActivity" />
         <activity android:name=".MenuActivity" />
-        <activity android:name=".NewProductActivity"></activity>
+        <activity android:name=".NewProductActivity" />
+        <activity android:name=".UserInfoActivity" />
+        <activity android:name=".UsersActivity"></activity>
     </application>
 
 </manifest>
