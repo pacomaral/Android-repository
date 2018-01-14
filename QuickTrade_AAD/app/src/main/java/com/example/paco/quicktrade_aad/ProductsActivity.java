@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -30,6 +31,7 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
 
     private Spinner spinnerCategoria, spinnerUsuarios;
     private ImageButton botonMenu;
+    private Button botonFiltrar;
     private ListView listViewProductos;
 
     private ArrayList<String> listaProductos;
@@ -63,6 +65,7 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
         spinnerUsuarios = (Spinner)findViewById(R.id.spinnerUsuario);
         botonMenu = (ImageButton)findViewById(R.id.botonMenuIcon);
         listViewProductos = (ListView)findViewById(R.id.listViewProductos);
+        botonFiltrar = (Button)findViewById(R.id.botonFiltrar);
 
         //Creamos objeto para gestionar la base de datos
         dbControl = new DBControl(this);
@@ -105,9 +108,39 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
 
         //Añadimos listener
         botonMenu.setOnClickListener(this);
+        botonFiltrar.setOnClickListener(this);
 
         //Registramos el contextMenu al listview
         registerForContextMenu(listViewProductos);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if(v.getId() == R.id.botonMenuIcon) {
+            //Finalizamos la actividad -- Volverá a MenuActivity ya que no fue finalizada
+            finish();
+        }
+        else if(v.getId() == R.id.botonFiltrar){
+            //Controlamos qué se ha elegido en los spinners
+            if(spinnerCategoria.getSelectedItem().equals("---") && !spinnerUsuarios.getSelectedItem().equals("---")){
+                //Filtramos por usuario
+                getProductosDeUsuario((String)spinnerUsuarios.getSelectedItem());
+            }
+            else if(!spinnerCategoria.getSelectedItem().equals("---") && spinnerUsuarios.getSelectedItem().equals("---")){
+                //Filtramos por categoria
+                getProductosDeCategoria((String)spinnerCategoria.getSelectedItem());
+            }
+            else if(!spinnerCategoria.getSelectedItem().equals("---") && !spinnerUsuarios.getSelectedItem().equals("---")){
+                //Filtramos por usuario y categoria
+                getProductosDeUsuarioYCategoria((String)spinnerUsuarios.getSelectedItem(), (String)spinnerCategoria.getSelectedItem());
+            }
+            else{
+                //No filtraremos por nada
+                getProductos();
+            }
+        }
     }
 
     /**
@@ -135,7 +168,7 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
                 validarUsuario_Modificar(nombreProducto);
                 return true;
             case R.id.opcionBorrarProducto:
-                //modificarProducto(String nombre);
+                borrarProducto(nombreProducto, nombreUsuario);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -170,9 +203,10 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                //Antes que nada, limpiamos la lista por si tenía elementos
+                listaProductos.clear();
+
                 for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
-                    //Antes que nada, limpiamos la lista por si tenía elementos
-                    listaProductos.clear();
                     //De cada nodo producto, obtenemos un objeto de este
                     Producto p = datasnapshot.getValue(Producto.class);
                     //Obtenemos su nombre
@@ -197,6 +231,76 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
         DatabaseReference dbr = dbControl.getReferenceProduct();
 
         Query q=dbr.orderByChild("usuario").equalTo(usuario);              //No funciona si se utiliza R.string.producto_usuario
+
+        q.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Limpiamos la lista por si tenía elementos
+                listaProductos.clear();
+                for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+                    //De cada nodo producto, obtenemos un objeto de este
+                    Producto p = datasnapshot.getValue(Producto.class);
+                    //Obtenemos su nombre
+                    String nombre = p.getNombre();
+                    //Lo añadimos a la lista
+                    listaProductos.add(nombre);
+                }
+
+                //Creamos el adaptador para el ListView
+                actualizarAdaptadorProductos(listaProductos);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void getProductosDeUsuarioYCategoria(String usuario, final String categoria){
+
+        DatabaseReference dbr = dbControl.getReferenceProduct();
+
+        //Obtenemos nodos que coincidan con el usuario
+        Query q=dbr.orderByChild("usuario").equalTo(usuario);              //No funciona si se utiliza R.string.producto_usuario
+
+        q.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Limpiamos la lista por si tenía elementos
+                listaProductos.clear();
+                for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+
+                    //De cada nodo producto, obtenemos un objeto de este
+                    Producto p = datasnapshot.getValue(Producto.class);
+
+                    //Controlemos que coincida la categoria
+                    if(p.getCategoria().equals(categoria)) {
+                        //Obtenemos su nombre
+                        String nombre = p.getNombre();
+                        //Lo añadimos a la lista
+                        listaProductos.add(nombre);
+                    }
+                }
+
+                //Creamos el adaptador para el ListView
+                actualizarAdaptadorProductos(listaProductos);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void getProductosDeCategoria(String categoria){
+
+        DatabaseReference dbr = dbControl.getReferenceProduct();
+
+        Query q=dbr.orderByChild("categoria").equalTo(categoria);              //No funciona si se utiliza R.string.producto_usuario
 
         q.addValueEventListener(new ValueEventListener() {
             @Override
@@ -262,6 +366,46 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
+    private void borrarProducto(String nombreProd, final String nombreUsuario){
+        final DatabaseReference dbr = dbControl.getReferenceProduct();
+
+        //Obtenemos nodos que coincidan con el usuario
+        Query q=dbr.orderByChild("nombre").equalTo(nombreProd);              //No funciona si se utiliza R.string.
+
+        q.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+
+                    //De cada nodo producto, obtenemos un objeto de este
+                    Producto p = datasnapshot.getValue(Producto.class);
+
+                    //Controlemos que el usuario sea el propietario
+                    if(p.getUsuario().equals(nombreUsuario)) {
+                        //Obtenemos la clave
+                        String clave = datasnapshot.getKey();
+
+                        DatabaseReference ref = dbr.child(clave);
+
+                        //Borramos el producto
+                        ref.removeValue();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "Este producto no te pertenece", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                //Creamos el adaptador para el ListView
+                actualizarAdaptadorProductos(listaProductos);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void actualizarAdaptadorProductos(ArrayList<String> lista){
 
         //Adaptador -- Con layout definido por nosotros
@@ -269,13 +413,6 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
 
         //Ponemos el adaptador al listView
         listViewProductos.setAdapter(adaptadorListView);
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        //Finalizamos la actividad -- Volverá a MenuActivity ya que no fue finalizada
-        finish();
     }
 
     private void validarUsuario_Modificar(final String nombreProducto){
@@ -318,3 +455,4 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 }
+

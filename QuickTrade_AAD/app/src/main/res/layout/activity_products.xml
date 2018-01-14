@@ -82,16 +82,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <ImageButton
                     android:id="@+id/botonMenuIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/menu_icon"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="50dp"/>
+                    android:layout_weight="0.4"
+                    android:src="@drawable/menu_icon" />
+
+                <Button
+                    android:id="@+id/botonFiltrar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.36"
+                    android:text="Filtrar"
+                    android:layout_margin="30dp"
+
+                    />
 
             </LinearLayout>
         </LinearLayout>
