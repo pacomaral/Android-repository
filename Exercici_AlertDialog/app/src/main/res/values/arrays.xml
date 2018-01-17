@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Aquí definiremos los elementos del array a utilizar en el AlertDialog-->
+<resources>
+    <!-- El array se llamará array_colores y tendrá 3 Strings: Blau, Verd, Roig -->
+    <string-array name="array_colores">
+        <item>Blau</item>
+        <item>Verd</item>
+        <item>Roig</item>
+    </string-array>
+</resources>

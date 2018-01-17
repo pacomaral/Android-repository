@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.paco.exercici_alertdialog.MainActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        >
+
+        <Button
+            android:id="@+id/botonFecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tria una data"
+            android:layout_margin="20dp"/>
+
+        <Button
+            android:id="@+id/botonHora"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tria una hora"
+            android:layout_margin="20dp"/>
+
+
+        <Button
+            android:id="@+id/botonColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tria un color"
+            android:layout_margin="20dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@android:color/darker_gray"
+        android:orientation="vertical"
+        android:paddingTop="25dp">
+
+        <TextView
+            android:id="@+id/textoFecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:text="DATA:"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/textoHora"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:text="HORA:"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/textoColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:text="COLOR:"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</LinearLayout>
