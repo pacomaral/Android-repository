@@ -2,6 +2,7 @@ package com.example.paco.quicktrade_aad.model;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -9,6 +10,8 @@ import android.widget.Toast;
 
 import com.example.paco.quicktrade_aad.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,7 +22,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
@@ -37,6 +44,13 @@ public class DBControl {
     private interfazDBControl comunicacion;
 
     private String nombreUsuario;
+
+    private FirebaseStorage storage;
+    private StorageReference imagesRef, nameRef;
+    private UploadTask uploadTask;
+
+    private Uri url;
+
 
     public DBControl(Context c){
         dbReferenceProd = FirebaseDatabase.getInstance().getReference("productos");
@@ -146,6 +160,32 @@ public class DBControl {
         });
     }
 
+    public void guardarImagen(Uri file){
+
+        //Inicializamos objetos necesarios
+        storage = FirebaseStorage.getInstance();
+        imagesRef = storage.getReference().child("imagenes");       //Referencia a "directorio" imágenes para guardarlas ahí
+
+        nameRef = imagesRef.child(file.getLastPathSegment());
+
+        uploadTask = nameRef.putFile(file);
+
+        //Con esto comprobamos si se ha añadido con éxito o no
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                //Si no se ha podido almacenar
+                Toast.makeText(context, "No se ha podido guardar la imagen", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                //Si se ha subido correctamente
+                Toast.makeText(context, "Imagen almacenada con éxito", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
 
 

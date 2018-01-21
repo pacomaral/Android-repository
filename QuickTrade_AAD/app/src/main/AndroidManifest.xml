@@ -25,7 +25,8 @@
         <activity android:name=".MenuActivity" />
         <activity android:name=".NewProductActivity" />
         <activity android:name=".UserInfoActivity" />
-        <activity android:name=".UsersActivity"></activity>
+        <activity android:name=".UsersActivity" />
+        <activity android:name=".ProductInfoActivity"></activity>
     </application>
 
 </manifest>

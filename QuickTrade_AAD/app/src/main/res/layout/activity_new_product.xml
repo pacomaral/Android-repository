@@ -108,6 +108,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="3"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/botonElegirImagen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seleccionar imagen"
+                android:layout_marginLeft="35dp"
+                android:layout_marginBottom="40dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
             android:orientation="vertical"
             android:background="@color/colorAccent">
 

@@ -170,6 +170,9 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.opcionBorrarProducto:
                 borrarProducto(nombreProducto, nombreUsuario);
                 return true;
+            case R.id.opcionVerInfoProducto:
+                lanzarProductInfoActivity(nombreProducto);
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -454,5 +457,44 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
             }
         });
     }
+
+    private void lanzarProductInfoActivity(String nombre){
+
+        DatabaseReference dbr = dbControl.getReferenceProduct();
+
+        Query q = dbr.orderByChild("nombre").equalTo(nombre);
+
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+                    //SUPONEMOS QUE EL NOMBRE DE PRODUCTO ES ÚNICO
+
+                    //Obtenemos el nodo producto
+                    Producto p = datasnapshot.getValue(Producto.class);
+
+                    //Lanzaremos ProductInfoActivity pasando datos correctos
+                    Intent i = new Intent(getApplicationContext(), ProductInfoActivity.class);
+                    Bundle b = new Bundle();
+
+                    b.putString("nombre", p.getNombre());
+                    b.putString("descripcion", p.getDescripcion());
+                    b.putString("precio", p.getPrecio());
+                    b.putString("categoria", p.getCategoria());
+                    b.putString("idImagen", p.getIdImagen());
+
+                    i.putExtras(b);
+
+                    startActivity(i);
+                    }
+                }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }
 

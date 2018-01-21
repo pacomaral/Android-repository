@@ -7,7 +7,7 @@ package com.example.paco.quicktrade_aad.model;
 public class Producto {
 
 
-    private String nombre, descripcion, categoria, precio, usuario;
+    private String nombre, descripcion, categoria, precio, usuario, idImagen;
 
 
     /**
@@ -19,12 +19,14 @@ public class Producto {
 
     }
 
-    public Producto(String nombre, String descripcion, String categoria, String precio, String usuario) {
+    public Producto(String nombre, String descripcion, String categoria, String precio, String usuario, String idImagen) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.categoria = categoria;
         this.precio = precio;
         this.usuario = usuario;
+        this.idImagen = idImagen;
+
     }
 
     /*
@@ -69,4 +71,13 @@ public class Producto {
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
+
+    public String getIdImagen() {
+        return idImagen;
+    }
+
+    public void setIdImagen(String idImagen) {
+        this.idImagen = idImagen;
+    }
+
 }

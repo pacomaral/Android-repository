@@ -1,6 +1,7 @@
 package com.example.paco.quicktrade_aad;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,15 +19,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+
 public class NewProductActivity extends AppCompatActivity implements View.OnClickListener{
 
     //Elementos del layout
     private EditText cajaNombre, cajaDescripcion, cajaPrecio;
     private RadioButton opcionHogar, opcionTecnologia, opcionCoches;
-    private Button botonNuevoProducto;
+    private Button botonNuevoProducto, botonElegirImagen;
 
     //Datos para crear producto
-    private String nombreUsuario, nombreProducto, descripcionProducto, precioProducto, categoriaProducto;
+    private String nombreUsuario, nombreProducto, descripcionProducto, precioProducto, categoriaProducto, idImagen;
 
     private DBControl dbControl;
     private String categoria;
@@ -36,6 +39,10 @@ public class NewProductActivity extends AppCompatActivity implements View.OnClic
     private String nombreUserMod;
     private boolean editar = false;
     private Producto p;
+
+    //Constante necesaria para cuando haya que elegir una imagen de la galería
+    private static final int IMAGE_REQUEST = 1;
+    private boolean imagenElegida = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,7 @@ public class NewProductActivity extends AppCompatActivity implements View.OnClic
         opcionTecnologia = (RadioButton)findViewById(R.id.opcionTecnologia);
         opcionCoches = (RadioButton)findViewById(R.id.opcionCoches);
         botonNuevoProducto = (Button)findViewById(R.id.botonNuevoProducto);
+        botonElegirImagen = (Button)findViewById(R.id.botonElegirImagen);
 
         dbControl = new DBControl(this);
 
@@ -66,15 +74,20 @@ public class NewProductActivity extends AppCompatActivity implements View.OnClic
             editar = false;
         }
 
+        botonElegirImagen.setOnClickListener(this);
+
         //Si hay que modificar el producto en lugar de registrarlo
         if(editar){
+
+            //En caso de editar, ponemos booleano en true porque ya tendrá imagen
+            imagenElegida = true;
 
             botonNuevoProducto.setText("Actualizar datos");
 
             //Rellenamos las cajas con los datos del producto
             consultarInfo(nombreProdMod, nombreUserMod);
 
-            //Añadimos nuevo listener al boton
+            //Añadimos nuevo listener al boton -- No el de la activity
             botonNuevoProducto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -108,24 +121,52 @@ public class NewProductActivity extends AppCompatActivity implements View.OnClic
 
     //Listener onClick
     public void onClick(View v) {
-        if(datosCorrectos()){
-            //Recogemos los datos de las cajas si están correctos
-            recogerDatos();
+        if(v.getId() == R.id.botonNuevoProducto) {
+            if (datosCorrectos()) {
+                //Recogemos los datos de las cajas si están correctos
+                recogerDatos();
 
-            //Creamos el objeto Producto con los datos recogidos
-            Producto p = new Producto(nombreProducto, descripcionProducto, categoriaProducto, precioProducto, nombreUsuario);
+                //Creamos el objeto Producto con los datos recogidos
+                Producto p = new Producto(nombreProducto, descripcionProducto, categoriaProducto, precioProducto, nombreUsuario, idImagen);
 
-            //Lo añadimos en la BBDD
-            dbControl.anyadirProductoBD(p);
+                //Lo añadimos en la BBDD
+                dbControl.anyadirProductoBD(p);
 
-            //Mostramos mensaje de éxito
-            Toast.makeText(getApplicationContext(), "Producto añadido con éxito", Toast.LENGTH_SHORT).show();
+                //Mostramos mensaje de éxito
+                Toast.makeText(getApplicationContext(), "Producto añadido con éxito", Toast.LENGTH_SHORT).show();
 
-            //Volveremos a la activity anterior
-            finish();
+                //Volveremos a la activity anterior
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "Falta algún dato por introducir", Toast.LENGTH_SHORT).show();
+            }
         }
-        else{
-            Toast.makeText(getApplicationContext(), "Falta algún dato por introducir", Toast.LENGTH_SHORT).show();
+        else if(v.getId() == R.id.botonElegirImagen){
+            //Lanzaremos con un intent un activity para elegir imagen de la galería
+            Intent i = new Intent();
+            i.setType("image/*");                        //Para que sólo podamos elegir imágenes
+            i.setAction(Intent.ACTION_GET_CONTENT);      //Con esto se nos abrirá la app indicada para elegir las imágenes
+
+            startActivityForResult(Intent.createChooser(i, "Elije una imagen"), IMAGE_REQUEST);
+        }
+    }
+
+    //Método que se llamará al elegir una imagen
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //Si el código es el que esperamos
+        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK) {
+
+            //Recuperamos la imagen en un File - Uri
+            Uri file = data.getData();
+
+            //Subimos este objeto File a firebase storage
+            dbControl.guardarImagen(file);
+
+            //Guardamos idImagen
+            idImagen = file.getLastPathSegment();
+
+            imagenElegida = true;
         }
     }
 
@@ -137,6 +178,10 @@ public class NewProductActivity extends AppCompatActivity implements View.OnClic
         }
         else{
             if(!opcionCoches.isChecked() && !opcionHogar.isChecked() && !opcionTecnologia.isChecked()){
+                return false;
+            }
+            else if(!imagenElegida){
+                Toast.makeText(getApplicationContext(), "No has elegido una imagen", Toast.LENGTH_SHORT).show();
                 return false;
             }
             else{
@@ -188,7 +233,7 @@ public class NewProductActivity extends AppCompatActivity implements View.OnClic
                             opcionTecnologia.setChecked(false);
                             opcionHogar.setChecked(false);
                         }
-                        else if(p.getCategoria().equals("Tecnologia")){
+                        else if(p.getCategoria().equals("Tecnología")){
                             opcionTecnologia.setChecked(true);
                             opcionHogar.setChecked(false);
                             opcionCoches.setChecked(false);
@@ -198,6 +243,7 @@ public class NewProductActivity extends AppCompatActivity implements View.OnClic
                             opcionCoches.setChecked(false);
                             opcionTecnologia.setChecked(false);
                         }
+                        idImagen = p.getIdImagen();
                     }
                 }
             }
@@ -232,6 +278,7 @@ public class NewProductActivity extends AppCompatActivity implements View.OnClic
                         dbr.child(clave).child("categoria").setValue(categoriaProducto);
                         dbr.child(clave).child("precio").setValue(precioProducto);
                         dbr.child(clave).child("descripcion").setValue(descripcionProducto);
+                        dbr.child(clave).child("idImagen").setValue(idImagen);
                     }
 
 
