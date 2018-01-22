@@ -15,7 +15,7 @@ import static android.R.attr.onClick;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button insertarEstudiante, insertarProfesor, borrarEstudiante, borrarProfesor, borrarBd, hacerConsulta;
+    private Button insertarEstudiante, insertarProfesor, borrarEstudiante, borrarProfesor, borrarBd, hacerConsulta, insertarAsignatura;
     private EditText cajaIdEstudiante, cajaIdProfesor;
     private Adaptador_DB adaptador;
 
@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cajaIdEstudiante = (EditText)findViewById(R.id.cajaIdEstudiante);
         cajaIdProfesor = (EditText)findViewById(R.id.cajaIdProfesor);
         hacerConsulta = (Button)findViewById(R.id.botonHacerConsulta);
+        insertarAsignatura = (Button)findViewById(R.id.botonInsertarAsignatura);
+
 
         //Añadimos listener a los botones
         insertarEstudiante.setOnClickListener(this);
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         borrarProfesor.setOnClickListener(this);
         borrarBd.setOnClickListener(this);
         hacerConsulta.setOnClickListener(this);
+        insertarAsignatura.setOnClickListener(this);
+
     }
 
     @Override
@@ -57,13 +61,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent i = new Intent(this, Activity_Profesor.class);
             startActivityForResult(i, 1);
         }
+        else if(v.getId() == R.id.botonInsertarAsignatura){
+            //Abriremos el activity de insertar asignatura -- No utilizamos startActivityForResult ya que no esperamos nada
+            Intent i = new Intent(getApplicationContext(), Activity_Asignatura.class);
+            startActivity(i);
+        }
         else if(v.getId() == R.id.botonBorrarEstudiante){
-            //Borraremos estudiante según Id
-            adaptador = new Adaptador_DB(getApplicationContext());
-            adaptador.abrir();
+                    //Borraremos estudiante según Id
+                    adaptador = new Adaptador_DB(getApplicationContext());
+                    adaptador.abrir();
 
-            try {//Si se logra borrar el estudiante, mostramos mensaje
-                if (adaptador.borrarEstudiante(Integer.valueOf(String.valueOf(cajaIdEstudiante.getText())))) {
+                    try {//Si se logra borrar el estudiante, mostramos mensaje
+                        if (adaptador.borrarEstudiante(Integer.valueOf(String.valueOf(cajaIdEstudiante.getText())))) {
                     Toast.makeText(getApplicationContext(), "Estudiante borrado con éxito", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Error. No existe ningún estudiante con esa ID", Toast.LENGTH_SHORT).show();

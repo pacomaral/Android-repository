@@ -21,17 +21,24 @@ public class Adaptador_DB {
     private static final String DATABASE_NAME = "db_ej4a.db";
     private static final String DATABASE_TABLE_STUDENTS = "estudiantes";
     private static final String DATABASE_TABLE_TEACHERS = "profesores";
+    //Ej examen
+    private static final String DATABASE_TABLE_ASIGNATURAS = "asignaturas";
     private static final int DATABASE_VERSION = 1;
 
     //Datos para las tablas
     private static final String NOMBRE_E = "nombre_estudiante", CICLO_E = "ciclo_estudiante", EDAD_E = "edad_estudiante", CURSO_E = "curso_estudiante", NOTA_E = "nota_media_estudiante";
     private static final String NOMBRE_P = "nombre_profesor", CICLO_P = "ciclo_profesor", EDAD_P = "edad_profesor", CURSO_P = "curso_profesor", DESPACHO_P = "despacho_profesor";
+    //Ej examen
+    private static final String NOMBRE_A = "nombre_asignatura", HORAS_A = "horas_asignatura";
 
     //Sentencias para crear y borrar tablas
     private static final String CREATE_TABLE_STUDENTS = "CREATE TABLE "+DATABASE_TABLE_STUDENTS+" (_id integer primary key autoincrement, "+NOMBRE_E+" text, "+EDAD_E+" integer, "+CICLO_E+" text, "+CURSO_E+" integer, "+NOTA_E+" text);";
     private static final String CREATE_TABLE_TEACHERS = "CREATE TABLE "+DATABASE_TABLE_TEACHERS+" (_id integer primary key autoincrement, "+NOMBRE_P+" text, "+EDAD_P+" integer, "+CICLO_P+" text, "+CURSO_P+" integer, "+DESPACHO_P+" text);";
     private static final String DROP_TABLE_STUDENTS = "DROP TABLE IF EXISTS "+DATABASE_TABLE_STUDENTS;
     private static final String DROP_TABLE_TEACHERS = "DROP TABLE IF EXISTS "+DATABASE_TABLE_TEACHERS;
+    //Ej examen
+    private static final String DROP_TABLE_ASIGNATURAS = "DROP TABLE IF EXISTS "+DATABASE_TABLE_ASIGNATURAS;
+    private static final String CREATE_TABLE_ASIGNATURAS = "CREATE TABLE "+DATABASE_TABLE_ASIGNATURAS+" (_id integer primary key autoincrement, "+NOMBRE_A+" text, "+HORAS_A+" text);";            //Las horas podrían ser Integer
 
     //Para poder obtener el contexto de la aplicación que utiliza la BBDD
     private Context contexto;
@@ -89,6 +96,18 @@ public class Adaptador_DB {
 
         //Insertamos el nuevo registro a la bd
         db.insert(DATABASE_TABLE_TEACHERS, null, datosProfesor);
+    }
+
+
+    //Método para insertar una asignatura en la BBDD
+    public void insertarAsignatura(Asignatura a){
+
+        //Recuperamos datos de la asignatura en ContentValues - Método creado en Asignatura.class
+        ContentValues datosAsignatura = a.crearContentValues();
+
+        //Insertamos el nuevo registro en la bd
+        db.insert(DATABASE_TABLE_ASIGNATURAS, null, datosAsignatura);
+
     }
 
     public boolean borrarEstudiante(int id){
@@ -263,6 +282,33 @@ public class Adaptador_DB {
         return lista;
     }
 
+    public ArrayList<String> obtenerAsignaturas(){
+
+        ArrayList<String> listaAsignaturas = new ArrayList<String>();
+
+        //Columnas que queremos recuperar
+        String[] columnas = new String[]{"_id", NOMBRE_A, HORAS_A};
+
+        //Cursor para realizar las consultas
+        Cursor cursor;
+
+        //Realizamos la consulta
+        cursor = db.query(DATABASE_TABLE_ASIGNATURAS, columnas, null, null, null, null, null);
+
+        //Recorremos el cursor
+        if(cursor != null && cursor.moveToFirst()) {
+            listaIds.clear();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                //Recuperamos los datos de cada resultado y los montamos como queremos
+                listaAsignaturas.add("Asignatura "+cursor.getInt(0) + "   ||   "+cursor.getString(1)+" ---- " + cursor.getInt(2)+" horas");
+                cursor.moveToNext();
+            }
+        }
+
+        //Devolvemos la lista obtenida
+        return listaAsignaturas;
+    }
+
     //Método para obtener una lista con los Ids de los estudiantes
     public ArrayList<Integer> getIds(){
         return this.listaIds;
@@ -283,12 +329,14 @@ public class Adaptador_DB {
             //Crearemos las dos tablas en la bbdd
             db.execSQL(CREATE_TABLE_STUDENTS);
             db.execSQL(CREATE_TABLE_TEACHERS);
+            db.execSQL(CREATE_TABLE_ASIGNATURAS);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL(DROP_TABLE_STUDENTS);
             db.execSQL(DROP_TABLE_TEACHERS);
+            db.execSQL(DROP_TABLE_ASIGNATURAS);
             onCreate(db);
         }
 

@@ -18,7 +18,8 @@
         </activity>
         <activity android:name=".controller_view.Activity_Estudiante" />
         <activity android:name=".controller_view.Activity_Profesor" />
-        <activity android:name=".controller_view.Activity_Consultas"></activity>
+        <activity android:name=".controller_view.Activity_Consultas" />
+        <activity android:name=".controller_view.Activity_Asignatura"></activity>
     </application>
 
 </manifest>

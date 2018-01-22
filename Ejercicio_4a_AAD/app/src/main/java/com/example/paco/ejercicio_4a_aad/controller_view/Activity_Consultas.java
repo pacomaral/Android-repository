@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class Activity_Consultas extends AppCompatActivity implements View.OnClickListener{
 
-    private Button botonRecuperarTodos, botonRecuperarEstudiantes, botonRecuperarProfesores;
+    private Button botonRecuperarTodos, botonRecuperarEstudiantes, botonRecuperarProfesores, botonRecuperarAsignaturas;
     private EditText cajaCiclo, cajaCurso;
     private ListView listaElementos;
     private ArrayList<String> elementos;
@@ -42,6 +42,7 @@ public class Activity_Consultas extends AppCompatActivity implements View.OnClic
         botonRecuperarEstudiantes = (Button)findViewById(R.id.botonRecuperarEstudiantes);
         botonRecuperarProfesores = (Button)findViewById(R.id.botonRecuperarProfesores);
         botonRecuperarTodos = (Button)findViewById(R.id.botonRecuperarTodos);
+        botonRecuperarAsignaturas = (Button)findViewById(R.id.botonRecuperarAsignaturas);
         listaElementos = (ListView)findViewById(R.id.listViewResultado);
         cajaCiclo = (EditText)findViewById(R.id.cajaConsultaCiclo);
         cajaCurso = (EditText)findViewById(R.id.cajaConsultaCurso);
@@ -50,6 +51,7 @@ public class Activity_Consultas extends AppCompatActivity implements View.OnClic
         botonRecuperarEstudiantes.setOnClickListener(this);
         botonRecuperarProfesores.setOnClickListener(this);
         botonRecuperarTodos.setOnClickListener(this);
+        botonRecuperarAsignaturas.setOnClickListener(this);
 
 
         registerForContextMenu(listaElementos);
@@ -148,6 +150,23 @@ public class Activity_Consultas extends AppCompatActivity implements View.OnClic
 
             mostrandoProfesores = true;
             mostrandoEstudiantes = true;
+        }
+        else if(v.getId() == R.id.botonRecuperarAsignaturas){
+
+            adaptador.abrir();
+
+            //Recuperamos todas las asignaturas
+            elementos = adaptador.obtenerAsignaturas();
+
+            //Actualizamos listview
+            actualizarListView(elementos);
+
+            //Si no se obtienen registros, significará que está vacía
+            if(elementos.isEmpty()){
+                Toast.makeText(getApplicationContext(), "Aún no existe ninguna asignatura", Toast.LENGTH_SHORT).show();
+            }
+
+            adaptador.cerrar();
         }
 
         //Obtenemos lista de Ids obtenidos en la consulta

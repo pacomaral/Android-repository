@@ -8,27 +8,48 @@
     android:padding="15dp">
 
     <LinearLayout
-        android:id="@+id/layout_botones"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        >
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/botonInsertarEstudiante"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/layout_botones"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Insertar estudiante" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/botonInsertarProfesor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            <Button
+                android:id="@+id/botonInsertarEstudiante"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Insertar estudiante" />
+
+            <Button
+                android:id="@+id/botonInsertarProfesor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Insertar profesor" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Insertar profesor" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/botonInsertarAsignatura"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Insertar Asignatura" />
+        </LinearLayout>
 
     </LinearLayout>
 

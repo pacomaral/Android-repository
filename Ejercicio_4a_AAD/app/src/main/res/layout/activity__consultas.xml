@@ -127,8 +127,8 @@
 
     <ListView
         android:id="@+id/listViewResultado"
-        android:layout_width="343dp"
-        android:layout_height="268dp"
+        android:layout_width="342dp"
+        android:layout_height="188dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -139,5 +139,22 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.921"
-        tools:layout_editor_absoluteY="214dp" />
+        tools:layout_editor_absoluteY="297dp"
+        tools:layout_editor_absoluteX="22dp" />
+
+    <Button
+        android:id="@+id/botonRecuperarAsignaturas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Consultar asignaturas"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintVertical_bias="0.454" />
 </android.support.constraint.ConstraintLayout>
