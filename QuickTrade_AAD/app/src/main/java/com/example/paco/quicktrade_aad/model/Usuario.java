@@ -1,5 +1,7 @@
 package com.example.paco.quicktrade_aad.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by Paco on 07/01/2018.
  */
@@ -9,17 +11,29 @@ public class Usuario {
 
     private String correo, usuario, nombre, apellidos, direccion;
 
+    private ArrayList<String> listaProductosFavoritos;
 
     //Constructor - El vacío es necesario para que funcione Firebase
     public Usuario(){
 
     }
-    public Usuario(String correo, String usuario, String nombre, String apellidos, String direccion) {
+
+    public ArrayList<String> getListaProductosFavoritos() {
+        return listaProductosFavoritos;
+    }
+
+    public void setListaProductosFavoritos(ArrayList<String> listaProductosFavoritos) {
+        this.listaProductosFavoritos = listaProductosFavoritos;
+    }
+
+    public Usuario(String correo, String usuario, String nombre, String apellidos, String direccion, ArrayList<String> listaProductosFavoritos) {
         this.correo = correo;
         this.usuario = usuario;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.direccion = direccion;
+        this.listaProductosFavoritos = listaProductosFavoritos;
+
     }
 
     //Getters y setters

@@ -26,7 +26,8 @@
         <activity android:name=".NewProductActivity" />
         <activity android:name=".UserInfoActivity" />
         <activity android:name=".UsersActivity" />
-        <activity android:name=".ProductInfoActivity"></activity>
+        <activity android:name=".ProductInfoActivity" />
+        <activity android:name=".FavoriteProductsActivity"></activity>
     </application>
 
 </manifest>

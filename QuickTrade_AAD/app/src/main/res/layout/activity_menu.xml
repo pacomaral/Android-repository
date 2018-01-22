@@ -74,6 +74,15 @@
                 android:layout_marginRight="40dp"/>
 
             <Button
+                android:id="@+id/botonProductosFavoritos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5"
+                android:text="Favoritos"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"/>
+
+            <Button
                 android:id="@+id/botonVerProductos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,7 +96,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2.5"
+            android:layout_weight="3"
             android:orientation="vertical"
             android:layout_marginBottom="40dp">
 

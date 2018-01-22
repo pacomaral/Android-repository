@@ -53,6 +53,11 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
 
     private Context ref;
 
+    private Usuario u;
+    private ArrayList<String> listaProdFavoritos;
+
+    private String clave;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,6 +177,9 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
                 return true;
             case R.id.opcionVerInfoProducto:
                 lanzarProductInfoActivity(nombreProducto);
+                return true;
+            case R.id.opcionMarcarFavorito:
+                guardarProductoFavorito(nombreProducto, nombreUsuario);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -488,6 +496,42 @@ public class ProductsActivity extends AppCompatActivity implements View.OnClickL
                     startActivity(i);
                     }
                 }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void guardarProductoFavorito(final String nombreProducto, String nombreUsuario){
+
+        final DatabaseReference dbr = dbControl.getReferenceUser();
+
+        Query q=dbr.orderByChild("usuario").equalTo(nombreUsuario);              //No funciona si se utiliza R.string.usuario
+
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+                    //Cogemos el nodo usuario que se obtendrá
+                    u = datasnapshot.getValue(Usuario.class);
+
+                    //Cogemos la clave del nodo obtenido (será uno)
+                    clave=datasnapshot.getKey();
+                }
+
+                //Obtenemos su lista de productos
+                listaProdFavoritos = u.getListaProductosFavoritos();
+
+                //Añadimos el nuevo producto
+                listaProdFavoritos.add(nombreProducto);
+
+                //Actualizamos lista de productos
+                dbr.child(clave).child("listaProductosFavoritos").setValue(listaProdFavoritos);
+
+                Toast.makeText(getApplicationContext(), "Producto añadido a favoritos", Toast.LENGTH_SHORT).show();
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

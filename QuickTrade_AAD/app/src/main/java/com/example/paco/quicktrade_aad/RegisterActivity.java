@@ -205,8 +205,13 @@ public class RegisterActivity extends AppCompatActivity {
         //Registramos al usuario
         dbControl.registrarUsuario(correo, password);
 
+        ArrayList<String> prodFavoritos = new ArrayList<String>();
+
+        prodFavoritos.add("probando");
+
+
         //Creamos el usuario con todos los datos recogidos
-        Usuario u = new Usuario(correo, usuario, nombre, apellidos, direccion);
+        Usuario u = new Usuario(correo, usuario, nombre, apellidos, direccion, prodFavoritos);
 
         //Añadiremos el usuario a la BD
         dbControl.anyadirUsuarioBD(u);

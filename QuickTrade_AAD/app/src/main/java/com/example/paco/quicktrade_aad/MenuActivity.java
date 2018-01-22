@@ -14,6 +14,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button botonAnyadirProducto, botonMisProductos, botonVerProductos;
     private Button botonModificarPerfil, botonVerUsuarios, botonCerrarSesion;
+    private Button botonProductosFavoritos;
     private TextView textoUsuario;
 
     private String nombreUsuario;
@@ -31,6 +32,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         botonVerUsuarios = (Button)findViewById(R.id.botonVerUsuarios);
         botonCerrarSesion = (Button)findViewById(R.id.botonCerrarSesion);
         textoUsuario = (TextView)findViewById(R.id.textoNombreUsuario);
+        botonProductosFavoritos = (Button)findViewById(R.id.botonProductosFavoritos);
 
         //Añadimos listener
         botonAnyadirProducto.setOnClickListener(this);
@@ -39,6 +41,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         botonModificarPerfil.setOnClickListener(this);
         botonVerUsuarios.setOnClickListener(this);
         botonCerrarSesion.setOnClickListener(this);
+        botonProductosFavoritos.setOnClickListener(this);
 
 
         //Recuperamos el usuario activo desde el intent que lanzó la actividad
@@ -131,6 +134,19 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             finish();
 
             //No pasaremos ningún parámetro
+            startActivity(i);
+        }
+        else if(v.getId() == R.id.botonProductosFavoritos){
+
+            //Abriremos FavoriteProductsActivity
+            Intent i = new Intent(getApplicationContext(), FavoriteProductsActivity.class);
+
+            //Pasamos el nombre de usuario para saber qué favoritos mirar
+            Bundle b = new Bundle();
+            b.putString("usuario", nombreUsuario);
+
+            i.putExtras(b);
+
             startActivity(i);
         }
     }

@@ -6,6 +6,10 @@
         android:title="Ver información">
     </item>
 
+    <item android:id="@+id/opcionMarcarFavorito"
+        android:title="Marcar como favorito">
+    </item>
+
     <item android:id="@+id/opcionModificarProducto"
         android:title="Modificar">
     </item>
